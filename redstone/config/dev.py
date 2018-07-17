@@ -2,10 +2,10 @@
 # -*- coding:utf-8 -*-
 
 """
-    
-    ~~~~~~~~~~~~~
+    redstone.config.dev
+    ~~~~~~~~~~~~~~~~~~~
 
-    
+    DEV配置
 
     :author:    lightless <root@lightless.me>
     :homepage:  None
