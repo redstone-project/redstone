@@ -29,7 +29,7 @@ try:
 except ImportError:
     import sys
     _env = os.getenv("DJANGO_ENV", "dev")
-    print("无法加载指定配置文件({})! 请检查是否设置了DJANGO_ENV环境变量!".format(_env))
+    print("无法加载指定配置文件({}.py)! 请检查是否设置了DJANGO_ENV环境变量!".format(_env))
     sys.exit(5)
 
 
@@ -72,17 +72,17 @@ WSGI_APPLICATION = 'redstone.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DATABASE_NAME,
-        'USER': DATABASE_USER,
-        'PASSWORD': DATABASE_PASSWORD,
-        'HOST': DATABASE_HOST,
-        'PORT': DATABASE_PORT,
-        'OPTIONS': DATABASE_OPTIONS,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': DATABASE_NAME,
+#         'USER': DATABASE_USER,
+#         'PASSWORD': DATABASE_PASSWORD,
+#         'HOST': DATABASE_HOST,
+#         'PORT': DATABASE_PORT,
+#         'OPTIONS': DATABASE_OPTIONS,
+#     }
+# }
 
 
 # Internationalization

@@ -160,3 +160,4 @@ venv.bak/
 
 ##### USER IGNORE #####
 redstone/config/prod.py
+redstone/config/dev.py

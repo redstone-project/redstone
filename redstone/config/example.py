@@ -14,7 +14,7 @@
 """
 
 DEBUG = True
-SECRET_KEY = 'ajhsdfljalkwj32u90348oadsjfoaiqwe'
+SECRET_KEY = '0q289aidfa23-098rawd#vajeifj'
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -29,12 +29,17 @@ EXTRA_MIDDLEWARE = [
 
 ]
 
-DATABASE_NAME = "redstone"
-DATABASE_USER = "root"
-DATABASE_PASSWORD = "123!@#"
-DATABASE_HOST = "127.0.0.1"
-DATABASE_PORT = "3306"
-DATABASE_OPTIONS = {
-    'init_command': 'SET default_storage_engine=INNODB;SET NAMES utf8mb4',
-    'charset': 'utf8mb4',
-}
+# DATABASE_NAME = "redstone"
+# DATABASE_USER = "root"
+# DATABASE_PASSWORD = "123!@#"
+# DATABASE_HOST = "127.0.0.1"
+# DATABASE_PORT = "3306"
+# DATABASE_OPTIONS = {
+#     'init_command': 'SET default_storage_engine=INNODB;SET NAMES utf8mb4',
+#     'charset': 'utf8mb4',
+# }
+
+MONGO_HOST = "﻿"
+MONGO_DB = "redstone"
+MONGO_USER = "redstone"
+MONGO_PASSWORD = "123456"
