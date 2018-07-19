@@ -18,6 +18,10 @@ from mongoengine import connect
 
 
 def connect_mongo():
+    """
+    连接到mongodb
+    :return: None
+    """
     connect(
         db=settings.MONGO_DB,
         host=settings.MONGO_HOST,

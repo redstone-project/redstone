@@ -2,10 +2,10 @@
 # -*- coding:utf-8 -*-
 
 """
-    redstone.database.models
-    ~~~~~~~~~~~~~~~~~~~~~~~~
+    redstone.database.models.spider
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    所有的数据库模型
+    记录爬虫相关的数据模型
 
     :author:    lightless <root@lightless.me>
     :homepage:  None
@@ -13,4 +13,11 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-from .feeds import RedstoneFeedsModel
+from django.db import models
+
+
+class RedstoneSpiderModel(models.Model):
+    class Meta:
+        db_table = "rs_spider"
+
+
