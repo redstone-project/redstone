@@ -42,6 +42,7 @@ DATABASE_OPTIONS = {
 
 # mongodb连接配置
 MONGO_HOST = "﻿"
+MONGO_PORT = "27017"
 MONGO_DB = "redstone"
 MONGO_USER = "redstone"
 MONGO_PASSWORD = "123456"
