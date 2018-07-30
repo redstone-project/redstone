@@ -21,6 +21,7 @@ class RedstoneFeedsModel(models.Model):
     :name: RSS源名称
     :url: RSS的地址
     :fetch_time: 上次拉取数据的时间
+    :interval: 刷新间隔，单位：min，默认每30分钟刷新一次
     :alive_status: 存活状态
         1 - ready，就绪
         2 - alive，存活
@@ -34,6 +35,7 @@ class RedstoneFeedsModel(models.Model):
     name = models.CharField(max_length=64, default="Default RSS Name", null=False)
     url = models.CharField(max_length=1024, default="", null=False)
     fetch_time = models.DateTimeField(default="", null=False)
+    interval = models.IntegerField(default=30, null=False)
     alive_status = models.IntegerField(default=0, null=False)
     spider_type = models.IntegerField(default=0, null=False)
     fail_reason = models.CharField(max_length=512, null=False)
