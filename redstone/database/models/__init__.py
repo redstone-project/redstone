@@ -15,3 +15,4 @@
 
 from .feeds import RedstoneFeedsModel
 from .spider import RedstoneSpiderModel
+from .article import RedstoneArticleModel

@@ -26,6 +26,7 @@ class RedstoneSpiderModel(models.Model):
 
     name = models.CharField(max_length=128, null=False, default="Default Spider")
     filename = models.CharField(max_length=256, null=False, default="default_rss.py")
+    class_name = models.CharField(max_length=256, null=False, default="DefaultRSSClassName")
 
     created_time = models.DateTimeField(auto_now_add=True, null=False)
     updated_time = models.DateTimeField(auto_now=True, null=False)
