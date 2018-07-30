@@ -2,10 +2,9 @@
 # -*- coding:utf-8 -*-
 
 """
-    redstone.database.models
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    所有的数据库模型
+    class path
+    ~~~~~~~~~~~~~~~
+    Class description.
 
     :author:    lightless <root@lightless.me>
     :homepage:  None
@@ -13,5 +12,3 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-from .feeds import RedstoneFeedsModel
-from .spider import RedstoneSpiderModel

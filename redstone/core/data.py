@@ -2,10 +2,10 @@
 # -*- coding:utf-8 -*-
 
 """
-    redstone.database.models
-    ~~~~~~~~~~~~~~~~~~~~~~~~
+    redstone.core.data
+    ~~~~~~~~~~~~~~~~~~
 
-    所有的数据库模型
+    全局数据存储点
 
     :author:    lightless <root@lightless.me>
     :homepage:  None
@@ -13,5 +13,6 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-from .feeds import RedstoneFeedsModel
-from .spider import RedstoneSpiderModel
+from django.conf import settings
+
+BASE_DIR = settings.BASE_DIR

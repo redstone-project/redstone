@@ -16,12 +16,15 @@
 from django.conf import settings
 from mongoengine import connect
 
+from ..utils.log import logger
+
 
 def connect_mongo():
     """
     连接到mongodb
     :return: None
     """
+    logger.debug("尝试连接mongodb..")
     connect(
         db=settings.MONGO_DB,
         host=settings.MONGO_HOST,
