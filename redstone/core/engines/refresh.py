@@ -17,7 +17,7 @@ import datetime
 from redstone.core import data as g_data
 from redstone.utils.datatype import AttribDict
 from redstone.utils.log import logger
-from .base import STBaseEngine
+from .base import STBaseEngine, EngineStatus
 from redstone.database.models import RedstoneFeedsModel
 
 
@@ -30,17 +30,25 @@ class RefreshEngine(STBaseEngine):
     def _worker(self):
         logger.info("RefreshEngine start!")
 
-        current_time = datetime.datetime.now()
-        rows = RedstoneFeedsModel.objects.filter(is_deleted=0).all()
-        for _feed in rows:
-            if _feed.fetch_time + datetime.timedelta(minutes=_feed.interval) <= current_time:
-                task = AttribDict()
-                task.name = _feed.name
-                task.url = _feed.url
-                task.spider_type = _feed.spider_type
-                self.put_result_to_queue(task)
+        while self._status == EngineStatus.RUNNING:
 
-                _feed.fetch_time = current_time
-                _feed.save()
+            # 每次读库前等一会
+            self._ev.wait(5)
+
+            current_time = datetime.datetime.now()
+            rows = RedstoneFeedsModel.objects.filter(is_deleted=0).all()
+            for _feed in rows:
+                if _feed.fetch_time + datetime.timedelta(minutes=_feed.interval) <= current_time:
+
+                    logger.debug("Detected out-date rss. (ID:%s, Name:%s)", _feed.id, _feed.name)
+
+                    task = AttribDict()
+                    task.name = _feed.name
+                    task.url = _feed.url
+                    task.spider_type = _feed.spider_type
+                    self.put_result_to_queue(task)
+
+                    _feed.fetch_time = current_time
+                    _feed.save()
 
         logger.info("RefreshEngine end!")

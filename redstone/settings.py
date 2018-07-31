@@ -29,6 +29,7 @@ try:
         from .config.dev import *
 except ImportError:
     import sys
+
     _env = os.getenv("DJANGO_ENV", "dev")
     print("无法加载指定配置文件({}.py)! 请检查是否设置了DJANGO_ENV环境变量!".format(_env))
     sys.exit(5)
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "redstone.database",
+    "redstone.system"
 ] + EXTRA_INSTALLED_APPS
 
 MIDDLEWARE = [

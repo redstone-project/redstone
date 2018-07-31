@@ -61,6 +61,7 @@ class STBaseEngine(object, metaclass=abc.ABCMeta):
         self._out_queue: Union[queue.Queue, queue.PriorityQueue] = None
 
     def start(self):
+        self._status = EngineStatus.RUNNING
         self.thread = threading.Thread(target=self._worker, name=self.name)
         self.thread.start()
 

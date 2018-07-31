@@ -15,6 +15,9 @@
 
 from django.core.management.base import BaseCommand
 
+from redstone.core.launcher import RedstoneApplication
+from redstone.core import data
+
 
 class Command(BaseCommand):
 
@@ -24,8 +27,9 @@ class Command(BaseCommand):
         )
 
         try:
-            # todo: 调用launcher中的方法启动整个程序
-            pass
+            # 调用launcher中的方法启动整个程序
+            data.REDSTONE_APP = RedstoneApplication()
+            data.REDSTONE_APP.run()
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR("Un-handled exception happened. Exception: {}".format(e))

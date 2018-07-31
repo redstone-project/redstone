@@ -16,8 +16,14 @@ import queue
 
 from django.conf import settings
 
+from .engines import RefreshEngine
+
 # 项目基础路径
 BASE_DIR = settings.BASE_DIR
 
-# 爬虫的任务队列
+# 全局保存的应用实例
+REDSTONE_APP = None
+
+# 存储刷新任务的任务队列
 REFRESH_TASK_QUEUE: queue.Queue = None
+REFRESH_ENGINE: RefreshEngine = None
