@@ -15,4 +15,10 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-pass
+from .base import MTBaseEngine
+
+
+class SpiderEngine(MTBaseEngine):
+    def __init__(self):
+        super(SpiderEngine, self).__init__()
+
