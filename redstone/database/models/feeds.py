@@ -29,6 +29,13 @@ class RedstoneFeedsModel(models.Model):
         4 - dead，更新失败
     :spider_name: 对应的爬虫ID
     """
+
+    # 定义RSS源的存活状态常量
+    ALIVE_STATUS_READY = 0x01
+    ALIVE_STATUS_ALIVE = 0x02
+    ALIVE_STATUS_FETCHING = 0x03
+    ALIVE_STATUS_DEAD = 0x04
+
     class Meta:
         db_table = "rs_feeds"
 
