@@ -42,9 +42,19 @@ class Command(BaseCommand):
         if not any([options.get(opt) for opt in self.AVAILABLE_OPTS]):
             raise CommandError("Must start at least one service!")
 
+        if all([options.get(opt) for opt in self.AVAILABLE_OPTS]):
+            raise CommandError("Only one service can be started!")
+
+        # 启动模式
+        mode = "spider"
+        if options.get("spider_mode"):
+            mode = "spider"
+        elif options.get("server_mode"):
+            mode = "server"
+
         try:
             # 调用launcher中的方法启动整个程序
-            data.REDSTONE_APP = RedstoneApplication()
+            data.REDSTONE_APP = RedstoneApplication(mode)
             data.REDSTONE_APP.run()
         except Exception as e:
             self.stdout.write(

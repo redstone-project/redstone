@@ -21,8 +21,11 @@ from .engines import RefreshEngine
 
 class RedstoneApplication(object):
 
-    def __init__(self):
+    def __init__(self, start_mode):
         super(RedstoneApplication, self).__init__()
+
+        # 启动模式
+        self.start_mode = start_mode
 
     @staticmethod
     def _init_queue():
