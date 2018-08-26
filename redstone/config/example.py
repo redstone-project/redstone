@@ -46,3 +46,12 @@ MONGO_PORT = "27017"
 MONGO_DB = "redstone"
 MONGO_USER = "redstone"
 MONGO_PASSWORD = "123456"
+
+# ActiveMQ连接配置
+ACTIVEMQ_HOST = "127.0.0.1"
+ACTIVEMQ_PORT = "61613"
+ACTIVEMQ_USERNAME = "redstone"
+ACTIVEMQ_PASSWORD = "123456"
+
+# 队列名称
+REFRESH_TASK_QUEUE_NAME = "redstone.refresh_task"

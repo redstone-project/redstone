@@ -12,11 +12,11 @@
     :license:   GPL-3.0, see LICENSE for more details.
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
-import queue
+import stomp
 
 from django.conf import settings
 
-from .engines import RefreshEngine
+from redstone.core.engines.refresh import RefreshEngine
 
 # 项目基础路径
 BASE_DIR = settings.BASE_DIR
@@ -25,5 +25,5 @@ BASE_DIR = settings.BASE_DIR
 REDSTONE_APP = None
 
 # 存储刷新任务的任务队列
-REFRESH_TASK_QUEUE: queue.Queue = None
+REFRESH_TASK_QUEUE: stomp.StompConnection11 = None
 REFRESH_ENGINE: RefreshEngine = None

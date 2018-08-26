@@ -20,8 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print("BASE_DIR: ", BASE_DIR)
 
 try:
-    _env = os.getenv("DJANGO_ENV", "dev")
-    if _env == "dev":
+    _env = os.getenv("DJANGO_ENV", None)
+    print("DJANGO_ENV: {}".format(_env))
+    if _env == "dev" or _env is None:
         from .config.dev import *
     elif _env == "prod":
         from .config.prod import *

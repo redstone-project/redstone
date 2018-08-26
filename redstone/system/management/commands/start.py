@@ -13,7 +13,7 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from redstone.core.launcher import RedstoneApplication
 from redstone.core import data
@@ -21,40 +21,14 @@ from redstone.core import data
 
 class Command(BaseCommand):
 
-    AVAILABLE_OPTS = [
-        "spider_mode", "server_mode"
-    ]
-
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--spider", action="store_true", dest="spider_mode", help="Run redstone in 'spider' mode."
-        )
-        parser.add_argument(
-            "--server", action="store_true", dest="server_mode", help="Run redstone in 'server' mode."
-        )
-
     def handle(self, *args, **options):
         self.stdout.write(
             self.style.SUCCESS("Starting Redstone application...")
         )
 
-        # 检查启动参数
-        if not any([options.get(opt) for opt in self.AVAILABLE_OPTS]):
-            raise CommandError("Must start at least one service!")
-
-        if all([options.get(opt) for opt in self.AVAILABLE_OPTS]):
-            raise CommandError("Only one service can be started!")
-
-        # 启动模式
-        mode = "spider"
-        if options.get("spider_mode"):
-            mode = "spider"
-        elif options.get("server_mode"):
-            mode = "server"
-
         try:
             # 调用launcher中的方法启动整个程序
-            data.REDSTONE_APP = RedstoneApplication(mode)
+            data.REDSTONE_APP = RedstoneApplication()
             data.REDSTONE_APP.run()
         except Exception as e:
             self.stdout.write(

@@ -12,3 +12,4 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
+print(__package__)
