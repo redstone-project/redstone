@@ -163,4 +163,4 @@ redstone/config/prod.py
 redstone/config/dev.py
 .idea/deployment.xml
 .idea/misc.xml
-logs
+logs/*.log
