@@ -16,6 +16,11 @@
 DEBUG = True
 SECRET_KEY = '0q289aidfa23-098rawd#vajeifj'
 
+# LOG配置
+LOG_TO_FILE = True
+LOG_FILENAME = "redstone.log"
+LOG_PATH = "logs"
+
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost"
