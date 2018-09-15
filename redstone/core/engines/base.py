@@ -51,7 +51,7 @@ class SingleThreadBaseEngine(object, metaclass=abc.ABCMeta):
         # 工作标志
         self._ev: threading.Event = threading.Event()
 
-        # app的长下文
+        # app的上下文
         self.app_ctx: RedstoneApplication = None
 
     def start(self):
