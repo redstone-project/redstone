@@ -15,10 +15,10 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-from .base import MTBaseEngine
+from .base import MultiThreadBaseEngine
 
 
-class SpiderEngine(MTBaseEngine):
+class SpiderEngine(MultiThreadBaseEngine):
     def __init__(self):
         super(SpiderEngine, self).__init__()
 

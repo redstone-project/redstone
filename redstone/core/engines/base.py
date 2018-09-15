@@ -71,14 +71,13 @@ class SingleThreadBaseEngine(object, metaclass=abc.ABCMeta):
         pass
 
 
-class MTBaseEngine(object, metaclass=abc.ABCMeta):
-    def __init__(self, in_queue, out_queue, pool_size=None):
+class MultiThreadBaseEngine(object, metaclass=abc.ABCMeta):
+    def __init__(self, pool_size=None):
         """
         多线程引擎的基类
-        :param in_queue: 输入队列
-        :param out_queue: 输出队列
+        :param pool_size: 线程池的大小
         """
-        super(MTBaseEngine, self).__init__()
+        super(MultiThreadBaseEngine, self).__init__()
 
         # 引擎名称
         self.name = "MultiThreadEngine"
@@ -95,10 +94,6 @@ class MTBaseEngine(object, metaclass=abc.ABCMeta):
         # 工作标志
         self._ev = threading.Event = threading.Event()
 
-        # 输入输出队列
-        self._in_queue: Union[queue.Queue, queue.PriorityQueue] = in_queue
-        self._out_queue: Union[queue.Queue, queue.PriorityQueue] = out_queue
-
     def start(self):
         self._status = EngineStatus.RUNNING
         self.thread_pool = [
@@ -106,28 +101,12 @@ class MTBaseEngine(object, metaclass=abc.ABCMeta):
         ]
         _ = [_thread.start() for _thread in self.thread_pool]
 
-    def stop(self, force=True):
-        def _stop():
-            self._status = EngineStatus.STOP
-            self._ev.set()
-
-        if force:
-            _stop()
-        else:
-            while True:
-                if self._in_queue.empty():
-                    _stop()
-                else:
-                    self._ev.wait(1)
+    def stop(self):
+        self._status = EngineStatus.STOP
+        self._ev.set()
 
     def is_alive(self):
         return any([x.is_alive() for x in self.thread_pool])
-
-    def get_task_from_queue(self):
-        return self._in_queue.get(block=False)
-
-    def put_result_to_queue(self, result):
-        self._out_queue.put(result)
 
     @abc.abstractmethod
     def _worker(self):
