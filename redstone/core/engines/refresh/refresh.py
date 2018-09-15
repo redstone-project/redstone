@@ -12,17 +12,16 @@
     :license:   GPL-3.0, see LICENSE for more details.
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
+
 import datetime
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
-import stomp
-from django.conf import settings
+import queue
 
 from redstone.database.models import RedstoneFeedsModel, RedstoneSpiderModel
 from redstone.utils.log import logger
-# from ...utils.log import logger
-from .base import SingleThreadBaseEngine, EngineStatus
+from redstone.core.engines.base import SingleThreadBaseEngine, EngineStatus
 
 if TYPE_CHECKING:
     from redstone.core.application import RedstoneApplication
@@ -30,19 +29,26 @@ if TYPE_CHECKING:
 
 class RefreshEngine(SingleThreadBaseEngine):
 
-    def __init__(self, in_queue, out_queue, app_ctx):
-        super(RefreshEngine, self).__init__(in_queue=in_queue, out_queue=out_queue)
+    def __init__(self, app_ctx):
+        super(RefreshEngine, self).__init__()
         self.name = "RefreshEngine"
-        # 为了重新指定一下lint
-        self._out_queue: stomp.StompConnection11 = out_queue
-
         self.app_ctx: RedstoneApplication = app_ctx
+        self.buffer_queue = self.app_ctx.BufferedQueues.REFRESH_TASK_BUFFER_QUEUE
 
-    def put_result_to_queue(self, result):
-        self._out_queue.send(
-            destination="/queue/{}".format(settings.REFRESH_TASK_QUEUE_NAME),
-            body=result
-        )
+    def push_task(self, task: Union[str, dict]):
+        """
+        将任务放到buffer队列中
+        :param task:
+        """
+        if isinstance(task, dict):
+            task = json.dumps(task)
+        while True:
+            try:
+                self.buffer_queue.put_nowait(task)
+                break
+            except queue.Empty:
+                self._ev.wait(0.1)
+                continue
 
     def _worker(self):
         logger.info("RefreshEngine start!")
@@ -79,7 +85,7 @@ class RefreshEngine(SingleThreadBaseEngine):
                         }
 
                         task = json.dumps(task)
-                        self.put_result_to_queue(task)
+                        self.push_task(task)
                     finally:
                         # 保证一定更新fetch_time字段
                         _feed.fetch_time = current_time
