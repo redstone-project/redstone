@@ -15,7 +15,7 @@
 
 from django.core.management.base import BaseCommand
 
-from redstone.core.launcher import RedstoneApplication
+from redstone.core.application import RedstoneApplication
 from redstone.core import data
 
 

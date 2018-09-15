@@ -14,23 +14,29 @@
 """
 import datetime
 import json
+from typing import TYPE_CHECKING
 
 import stomp
 from django.conf import settings
 
+from redstone.database.models import RedstoneFeedsModel, RedstoneSpiderModel
 from redstone.utils.log import logger
 # from ...utils.log import logger
-from .base import STBaseEngine, EngineStatus
-from redstone.database.models import RedstoneFeedsModel, RedstoneSpiderModel
+from .base import SingleThreadBaseEngine, EngineStatus
+
+if TYPE_CHECKING:
+    from redstone.core.application import RedstoneApplication
 
 
-class RefreshEngine(STBaseEngine):
+class RefreshEngine(SingleThreadBaseEngine):
 
-    def __init__(self, in_queue, out_queue):
+    def __init__(self, in_queue, out_queue, app_ctx):
         super(RefreshEngine, self).__init__(in_queue=in_queue, out_queue=out_queue)
         self.name = "RefreshEngine"
         # 为了重新指定一下lint
         self._out_queue: stomp.StompConnection11 = out_queue
+
+        self.app_ctx: RedstoneApplication = app_ctx
 
     def put_result_to_queue(self, result):
         self._out_queue.send(

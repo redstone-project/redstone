@@ -12,7 +12,7 @@
     :license:   GPL-3.0, see LICENSE for more details.
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
-
+import queue
 import stomp
 
 from django.conf import settings
@@ -23,6 +23,19 @@ from redstone.utils.log import logger
 
 
 class RedstoneApplication(object):
+
+    class BufferedQueues:
+        """
+        存放所有的本地buffer queue
+        """
+        REFRESH_TASK_BUFFER_QUEUE: queue.Queue = None
+        SPIDER_RESULT_BUFFER_QUEUE: queue.Queue = None
+
+    class AppEngines:
+        """
+        存放所有的engines
+        """
+        REFRESH_ENGINE: RefreshEngine = None
 
     def __init__(self):
         super(RedstoneApplication, self).__init__()
@@ -42,6 +55,11 @@ class RedstoneApplication(object):
         程序真正的入口
         """
         logger.info("redstone application start!")
+
+        # 初始化RefreshEngine和它所用的本地buffer queue
+        self.BufferedQueues.REFRESH_TASK_BUFFER_QUEUE = queue.Queue()
+        self.AppEngines.REFRESH_ENGINE = RefreshEngine()
+
 
         # 连接到ActiveMQ队列
         self._init_queue()

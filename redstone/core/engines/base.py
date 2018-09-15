@@ -13,40 +13,31 @@
     :copyright: Copyright (c) 2017 lightless. All rights reserved
 """
 
-# todo: 各种引擎抽出来共同的基础类
-
-import abc
 import multiprocessing
 import queue
 import threading
-from typing import Union, List
+from typing import Union, List, TYPE_CHECKING
 
-try:
-    from dataclasses import dataclass
+import abc
 
-    @dataclass(frozen=True)
-    class EngineStatus:
-        READY = 0x00
-        RUNNING = 0x01
-        STOP = 0x02
-except ImportError:
-    class EngineStatus:
-        READY = 0x00
-        RUNNING = 0x01
-        STOP = 0x02
+if TYPE_CHECKING:
+    from redstone.core.application import RedstoneApplication
 
 
-class STBaseEngine(object, metaclass=abc.ABCMeta):
+class EngineStatus:
+    # TODO: 使用dataclass替换该类
+    READY = 0x00
+    RUNNING = 0x01
+    STOP = 0x02
+
+
+class SingleThreadBaseEngine(object, metaclass=abc.ABCMeta):
     """
     单线程的基础类
     """
 
-    def __init__(self, in_queue, out_queue):
-        """
-        :param in_queue: 输入队列
-        :param out_queue: 输出队列
-        """
-        super(STBaseEngine, self).__init__()
+    def __init__(self):
+        super(SingleThreadBaseEngine, self).__init__()
 
         # 引擎的名称
         self.name = "SingleThreadEngine"
@@ -60,46 +51,20 @@ class STBaseEngine(object, metaclass=abc.ABCMeta):
         # 工作标志
         self._ev: threading.Event = threading.Event()
 
-        # 输入、输出队列
-        self._in_queue: Union[queue.Queue, queue.PriorityQueue] = None
-        self._out_queue: Union[queue.Queue, queue.PriorityQueue] = None
+        # app的长下文
+        self.app_ctx: RedstoneApplication = None
 
     def start(self):
         self._status = EngineStatus.RUNNING
         self.thread = threading.Thread(target=self._worker, name=self.name)
         self.thread.start()
 
-    def stop(self, force=True):
-        def _stop():
-            self._status = EngineStatus.STOP
-            self._ev.set()
-        if force:
-            _stop()
-        else:
-            while True:
-                if self._in_queue.empty():
-                    _stop()
-                else:
-                    self._ev.wait(1)
+    def stop(self):
+        self._status = EngineStatus.STOP
+        self._ev.set()
 
     def is_alive(self):
         return self.thread.is_alive()
-
-    def get_task_from_queue(self, timeout=1):
-        """
-        从输入队列中获取任务
-        :param timeout: 超时时间，默认为1s
-        :return: task
-        """
-        return self._in_queue.get(block=False)
-
-    def put_result_to_queue(self, result):
-        """
-        向输出队列中放置结果
-        :param result: 需要放到队列中的结果
-        :return:
-        """
-        self._out_queue.put(result, block=False)
 
     @abc.abstractmethod
     def _worker(self):
