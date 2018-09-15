@@ -31,7 +31,31 @@ class EngineStatus:
     STOP = 0x02
 
 
-class SingleThreadBaseEngine(object, metaclass=abc.ABCMeta):
+class CommonEngineBase(object, metaclass=abc.ABCMeta):
+    """
+    通用基类，仅提供接口
+    """
+    def __init__(self):
+        super(CommonEngineBase, self).__init__()
+
+    @abc.abstractmethod
+    def start(self):
+        pass
+
+    @abc.abstractmethod
+    def stop(self):
+        pass
+
+    @abc.abstractmethod
+    def is_alive(self):
+        pass
+
+    @abc.abstractmethod
+    def _worker(self):
+        pass
+
+
+class SingleThreadBaseEngine(CommonEngineBase, metaclass=abc.ABCMeta):
     """
     单线程的基础类
     """
@@ -71,7 +95,7 @@ class SingleThreadBaseEngine(object, metaclass=abc.ABCMeta):
         pass
 
 
-class MultiThreadBaseEngine(object, metaclass=abc.ABCMeta):
+class MultiThreadBaseEngine(CommonEngineBase, metaclass=abc.ABCMeta):
     def __init__(self, pool_size=None):
         """
         多线程引擎的基类
