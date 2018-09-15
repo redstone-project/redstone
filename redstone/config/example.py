@@ -36,21 +36,14 @@ EXTRA_MIDDLEWARE = [
 
 # MySQL连接配置
 DATABASE_NAME = "redstone"
-DATABASE_USER = "root"
+DATABASE_USER = "redstone"
 DATABASE_PASSWORD = "123!@#"
 DATABASE_HOST = "127.0.0.1"
-DATABASE_PORT = "3306"
-DATABASE_OPTIONS = {
-    'init_command': 'SET default_storage_engine=INNODB;SET NAMES utf8mb4',
-    'charset': 'utf8mb4',
-}
-
-# mongodb连接配置
-MONGO_HOST = "﻿"
-MONGO_PORT = "27017"
-MONGO_DB = "redstone"
-MONGO_USER = "redstone"
-MONGO_PASSWORD = "123456"
+DATABASE_PORT = "5432"
+# DATABASE_OPTIONS = {
+#     'init_command': 'SET default_storage_engine=INNODB;SET NAMES utf8mb4',
+#     'charset': 'utf8mb4',
+# }
 
 # ActiveMQ连接配置
 ACTIVEMQ_HOST = "127.0.0.1"
@@ -58,5 +51,8 @@ ACTIVEMQ_PORT = "61613"
 ACTIVEMQ_USERNAME = "redstone"
 ACTIVEMQ_PASSWORD = "123456"
 
-# 队列名称
-REFRESH_TASK_QUEUE_NAME = "redstone.refresh_task"
+# ActiveMQ队列信息
+ACTIVEMQ_QUEUES = {
+    "SPIDER_TASK": "redstone.task.spider_task",
+    "SPIDER_RESULT": "redstone.result.spider_result",
+}

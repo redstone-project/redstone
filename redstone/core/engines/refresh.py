@@ -21,7 +21,7 @@ from django.conf import settings
 from redstone.utils.log import logger
 # from ...utils.log import logger
 from .base import STBaseEngine, EngineStatus
-from redstone.database.models import RedstoneFeedsModel
+from redstone.database.models import RedstoneFeedsModel, RedstoneSpiderModel
 
 
 class RefreshEngine(STBaseEngine):
@@ -53,19 +53,30 @@ class RefreshEngine(STBaseEngine):
 
                     logger.debug("Detected out-date rss. (ID:%s, Name:%s)", _feed.id, _feed.name)
 
-                    task = {
-                        "name": _feed.name,
-                        "url": _feed.url,
-                        "spider_type": _feed.spider_type
-                    }
-                    # task = AttribDict()
-                    # task.name = _feed.name
-                    # task.url = _feed.url
-                    # task.spider_type = _feed.spider_type
-                    task = json.dumps(task)
-                    self.put_result_to_queue(task)
+                    try:
+                        # 获取该feed使用的spider名称
+                        sp = RedstoneSpiderModel.objects.filter(is_deleted=0, pk=_feed.spider_type).first()
+                        if not sp:
+                            logger.error("Can't get (name: {}, id: {}) spider info!".format(_feed.name, _feed.id))
+                            # TODO: 考虑将feed的状态设置为失效
+                            continue
 
-                    _feed.fetch_time = current_time
-                    _feed.save()
+                        # 将需要刷新的任务封装成指定的格式
+                        task = {
+                            "feed_url": _feed.url,
+                            "feed_id": _feed.id,
+                            "feed_name": _feed.name,
+                            "feed_config": {
+                                "use_proxy": _feed.use_proxy
+                            },
+                            "spider_name": sp.name
+                        }
+
+                        task = json.dumps(task)
+                        self.put_result_to_queue(task)
+                    finally:
+                        # 保证一定更新fetch_time字段
+                        _feed.fetch_time = current_time
+                        _feed.save()
 
         logger.info("RefreshEngine end!")
