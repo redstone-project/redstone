@@ -28,6 +28,7 @@ class RedstoneFeedsModel(models.Model):
         3 - fetching，更新中
         4 - dead，更新失败
     :spider_name: 对应的爬虫ID
+    :fail_reason: 最后一次爬取的结果，如果成功则留空，否则为具体的失败原因
     """
 
     # 定义RSS源的存活状态常量
@@ -35,6 +36,11 @@ class RedstoneFeedsModel(models.Model):
     ALIVE_STATUS_ALIVE = 0x02
     ALIVE_STATUS_FETCHING = 0x03
     ALIVE_STATUS_DEAD = 0x04
+
+    # 代理使用状态
+    PROXY_AUTO = 0x01
+    PROXY_ENABLE = 0x02
+    PROXY_DISABLE = 0x03
 
     class Meta:
         db_table = "rs_feeds"
@@ -46,6 +52,7 @@ class RedstoneFeedsModel(models.Model):
     alive_status = models.IntegerField(default=0, null=False)
     spider_type = models.IntegerField(default=0, null=False)
     fail_reason = models.CharField(max_length=512, null=False)
+    use_proxy = models.IntegerField(default=0, null=False)
 
     created_time = models.DateTimeField(auto_now_add=True, null=False)
     updated_time = models.DateTimeField(auto_now=True, null=False)
