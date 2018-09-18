@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'redstone.wsgi.application'
 #         'OPTIONS': DATABASE_OPTIONS,
 #     }
 # }
-DATABASE = {
+DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": DATABASE_NAME,

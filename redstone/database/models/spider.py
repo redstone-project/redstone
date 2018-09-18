@@ -31,7 +31,7 @@ class RedstoneSpiderModel(models.Model):
         db_table = "rs_spider"
 
     title = models.CharField(max_length=128, null=False, default="Default Spider")
-    spider_name = models.CharField(max_length=128, null=False, default="SpiderName")
+    spider_name = models.CharField(max_length=128, null=False, default="SpiderName", db_index=True)
     filename = models.CharField(max_length=256, null=False, default="default_rss.py")
     class_name = models.CharField(max_length=256, null=False, default="DefaultRSSClassName")
 
