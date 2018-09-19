@@ -14,6 +14,8 @@
 
 import typing
 
+import stomp
+
 from ..base import SingleThreadBaseEngine, EngineStatus
 
 
@@ -25,13 +27,33 @@ class TaskKeeper(SingleThreadBaseEngine):
     """
     从TaskBufferQueue中获取任务放到ActiveMQ中
     """
-    def __init__(self, app_ctx):
+    def __init__(self, app_ctx, activemq_info: dict):
         super(TaskKeeper, self).__init__()
+
+        # engine name
         self.name = "TaskKeeper"
+
+        # Application context
         self.app_ctx: RedstoneApplication = app_ctx
+
+        # 队列信息，后面要靠rc项目通用化
+        self.activemq_info: dict = activemq_info
+
+        # activemq
+        self.activemq_queue = None
+
+    def connect_activemq(self):
+        host_info = self.activemq_info.pop("host_info")
+        username = self.activemq_info.pop("username")
+        password = self.activemq_info.pop("password")
+        queue_name = self.activemq_info.pop("queue_name")
+
+        self.activemq_queue = stomp.Connection([host_info])
+        self.activemq_queue.connect()
 
     def start(self):
         # TODO: Connect To ActiveMQ
+        self.connect_activemq()
         super(TaskKeeper, self).start()
 
     def _worker(self):
